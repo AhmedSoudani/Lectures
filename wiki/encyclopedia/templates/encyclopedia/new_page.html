@@ -1,0 +1,32 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    New Page
+{% endblock %}
+
+{% block body %}
+
+    {% if request.GET.title and request.GET.content %}
+
+    <div class="alert alert-success">
+        New Page {{ request.GET.title }} created successfully! <a href="{% url 'wiki_page' title=request.GET.title %}?content=request.GET.content %}">click here</a> to view
+    </div>
+    {% endif %}
+
+    {% if title_exists %}
+    <div class="alert alert-danger">
+        the "{{  existing_title }}" is already exists
+    </div>
+    {% endif %}
+
+    <h2>Creat a New Page</h2>
+    <form action="{% url 'new_page' %}" method="post">
+        {% csrf_token %}
+        <label>Entry title :</label><br>
+        <input id="titlearea" name="titlearea" placeholder="Enter your title here"><br>
+        <label>content :</label><br>
+        <textarea id="textarea" name="textarea" rows="12" cols="40" placeholder="Enter your content here"></textarea>
+        <button type="submit">Creat Page</button>
+    </form>
+
+{% endblock %}
