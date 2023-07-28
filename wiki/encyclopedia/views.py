@@ -69,3 +69,25 @@ def random_page(request):
     entries = util.list_entries()
     random_title = random.choice(entries)
     return HttpResponseRedirect(reverse("wiki_page", args=[random_title]))
+
+def edit_page(request, title):
+    content = util.get_entry(title)
+    if content is None:
+        return render(request, "encyclopedia/Page_error", {
+            "title": title
+        })
+    return render(request, "encyclopedia/edit_page.html", {
+        "title": title,
+        "content": content
+    })
+
+def save_page(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        content = request.POST['content']
+
+        util.save_entry(title, content)
+
+        return HttpResponseRedirect(reverse("wiki_page", args=[title]))
+    
+    return HttpResponseRedirect(reverse("index"))
